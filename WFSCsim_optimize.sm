@@ -1,0 +1,72 @@
+main
+
+	lweight 3
+
+	expand 1.5
+	
+        ctype black
+	window 1 1 1 1
+	
+  	limits 0.0 15.0 0.0 10.0
+	box
+
+	xlabel WFS cadence (days)
+	ylabel days per year
+
+	relocate 11.0 6.8
+	ctype blue
+	label total
+	relocate 11.0 1.85
+	ctype green
+	label WFS&C
+	relocate 11.0 1.5
+	label activities 
+	relocate 11.0 4.2
+	ctype red
+	label repeats
+	ctype black
+
+	expand 1.5
+
+	data "WFSCsim.out3"
+	lines 1 10000
+	read t      1
+	read durwfs 8
+	read dursci 9
+	read durnet 10
+	read rmswfs 17
+	read rmssci 18
+	read rmsnet 19
+
+	ptype 12 3
+	expand 1.0
+	ctype green
+	points  t durwfs
+	connect t durwfs
+#	errorbar t durwfs rmswfs 2
+#	errorbar t durwfs rmswfs 4
+	ctype red
+	points  t dursci
+	connect t dursci
+#	errorbar t dursci rmssci 2
+#	errorbar t dursci rmssci 4
+	ctype blue
+	points  t durnet
+	connect t durnet
+#	errorbar t durnet rmsnet 2
+#	errorbar t durnet rmsnet 4
+	ctype black
+
+	data "WFSCsim.out4"
+	lines 1 10000
+	read t      1
+	read durwfs 2
+	read dursci 3
+	read durnet 4
+
+	ltype 2
+	connect t durwfs
+	connect t dursci
+	connect t durnet
+	ltype 0
+

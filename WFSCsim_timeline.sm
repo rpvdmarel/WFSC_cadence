@@ -1,0 +1,100 @@
+main
+
+	lweight 3
+
+	expand 1.0
+
+	limits 0 1000 55.0 145.0
+	box
+
+	relocate 0.0 0.0
+	draw 1000.0 0.0
+
+	xlabel future days 
+	ylabel OTE RMS WFE (nm)
+
+# Show requirement
+
+	ltype 2
+	relocate 0.0 131.0
+	draw 1000.0 131.0
+	ltype 0
+
+# Show baseline
+
+	ltype 1
+	relocate 0.0 62.83
+	draw 1000.0 62.83
+	ltype 0
+
+# Show control trigger
+
+	ltype 1
+	relocate 0.0 70.83
+	draw 1000.0 70.83
+	ltype 0
+
+# Read the simulated timeline
+
+	data "WFSCsim.out1"
+	lines 1 10000
+	read t   3
+	read rms 4
+	read is  5
+	read ic  6
+	read rmslin 7
+	
+# Show controls
+
+	set tcont   = t   if (ic==1) 
+	set rmscont = rms if (ic==1)
+	
+	ctype green
+	expand 1.5
+	ptype 12 3
+	points tcont rmscont
+	expand 1.0
+	ctype black
+
+	expand 0.2
+	ptype 12 3
+		
+# Show jumps
+
+	set tobs   = t   if (is==2) 
+	set rmsobs = rms if (is==2)
+	
+	ctype yellow
+	expand 3.0
+	ptype 12 3
+	points tobs rmsobs
+	expand 1.0
+	ctype black
+
+# Calculate and plot an array with the observed WF error, that is, 
+# only those points for which there was a sensing
+
+	set tobs   = t   if (is>=1) 
+	set rmsobs = rms if (is>=1)
+	
+	expand 0.4
+	ptype 12 3
+	points tobs rmsobs
+
+# Draw slopefits (correct, but no longer needed)
+
+#	ctype red
+#	connect t rmslin
+#	ctype black
+
+# Draw slopefits using starts and ends of linear segments
+
+	data "WFSCsim.out5"
+	lines 1 50
+	read t 1
+	read rmslin 2
+
+	ctype red
+	connect t rmslin
+	ctype black
+
