@@ -95,17 +95,15 @@ CCCCCCCCCCCCCCCCCCCC
 C
 C Set properties of WFS&C operations
 C
-C Set the duration in hours taken up by a WFS visit, based on 53 minutes
-C presented by Lallo at 09/20/2024 meeting, and 13 minute savings from cutting
-C dithering + LOS      
+C Set the duration in hours taken up by a WFS visit, based on 51 minutes
+C for Cycle 4 
 C      
-      durwfs = 40.0D0 / 60.0D0    
+      durwfs = 51.0D0 / 60.0D0    
 C      
-C Set the duration in hours taken up by a WFS&C visit, based on approximate
-C 2hr statement by Lallo at 09/20/2024 meeting, agreed by Comeau, and
-C subtracting 2*13 minutes. 
+C Set the duration in hours taken up by a WFS&C visit, based on 98 minutes
+C for Cycle 4
 C      
-      durwfsc = 94.0D0 / 60.0D0 
+      durwfsc = 98.0D0 / 60.0D0 
 C      
 C Set the delay in days which with a wavefront control can be executed 
 C after the last wavefront sensing. Per discussion with Comeau. 
@@ -217,11 +215,13 @@ C
      &            (fracreq*(year/tBjumpav))    
       fractot = xNr/xNj
 C
+      slopeav = (slopemin+slopemax) / 2.0D0
+      xNd     = year*slopeav/(rmslim-rmsbase)
+C      
 C Now evaluate the parameters defined in my Tech Memo
 C      
-      apar = (year*(durwfs/24.0D0))
-      cpar = ((year*(slopemin+slopemax)/(2*(rmslim-rmsbase)))+xNj)*
-     &         ((durwfsc-durwfs)/24.0D0)
+      apar = (durwfs/24.0D0)  * (year-((xNd+xNj)*dtc))
+      cpar = (durwfsc/24.0D0) * (xNd+xNj)
       bpar = xNj*fractot/2.0D0
       dpar = (2.0D0*dtc*bpar)
 C
